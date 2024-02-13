@@ -5,8 +5,15 @@ import java.io.InputStreamReader;
 
 public class ReadFile 
 {
+    private static final BufferedReader sc;
+    
     private String fileName;
     private BufferedReader in;
+
+    static
+    {
+        sc = new BufferedReader(new InputStreamReader(System.in));
+    }
 
     public ReadFile(String message)
     {
@@ -31,9 +38,7 @@ public class ReadFile
         try
         {
             System.out.print(message);
-            BufferedReader terminalReader = new BufferedReader(new InputStreamReader(System.in));
-            fileName = terminalReader.readLine();
-            terminalReader.close();
+            fileName = sc.readLine();
         }
         catch(IOException e)
         {
@@ -86,6 +91,20 @@ public class ReadFile
         catch(IOException e)
         {
             System.err.println("Cannot close the file : " + fileName + ".");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public static void closeTerminal()
+    {
+        try
+        {
+            sc.close();
+        }
+        catch(IOException e)
+        {
+            System.err.println("Cannot close terminal.");
             e.printStackTrace();
             System.exit(1);
         }

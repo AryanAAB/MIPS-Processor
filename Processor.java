@@ -43,6 +43,7 @@ class Manager extends JPanel
     private DrawingBoard draw;
     private Register register;
     private InstructionMemory instructions;
+    private DataMemory data;
 
     public static final String [] TAB_NAMES = {"Processor", "Register File", "Data File", "Instruction File"};
     
@@ -53,13 +54,16 @@ class Manager extends JPanel
         draw = new DrawingBoard();
         register = new Register();
         instructions = new InstructionMemory();
+        data = new DataMemory();
+
+        ReadFile.closeTerminal();
 
         tabs = new JTabbedPane();
         
 
         tabs.addTab(TAB_NAMES[0], null, draw);
         tabs.addTab(TAB_NAMES[1], null, register);
-        tabs.addTab(TAB_NAMES[2], null, new JPanel());
+        tabs.addTab(TAB_NAMES[2], null, data);
         tabs.addTab(TAB_NAMES[3], null, instructions);
 
         tabs.addChangeListener(new ChangeListener() 
