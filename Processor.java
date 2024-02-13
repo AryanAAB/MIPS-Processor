@@ -78,7 +78,7 @@ class Manager extends JPanel
         register = new Register();
         instructions = new InstructionMemory();
         data = new DataMemory();
-        draw = new DrawingBoard(instructions, data);
+        draw = new DrawingBoard(instructions, data, register);
         
         ReadFile.closeTerminal();
 

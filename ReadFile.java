@@ -17,17 +17,17 @@ public class ReadFile
 
     public ReadFile(String message)
     {
-        fileName = getFileName(message);
-
-        try
+        while(true)
         {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
-        }
-        catch(IOException e)
-        {
-            System.err.println("Cannot read from file : " + fileName + ".");
-            e.printStackTrace();
-            System.exit(1);
+            try
+            {
+                fileName = getFileName(message);
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
+                break;
+            }
+            catch(IOException e)
+            {
+            }
         }
     }
 

@@ -17,7 +17,7 @@ public class DrawingBoard extends JPanel
     private TopPanel bar;
     private CenterTextField centerField;
 
-    public DrawingBoard(InstructionMemory instructions, DataMemory data)
+    public DrawingBoard(InstructionMemory instructions, DataMemory data, Register register)
     {
         super(new BorderLayout());
 
@@ -25,7 +25,7 @@ public class DrawingBoard extends JPanel
 
         fields = new InputOutputFields();
         centerField = new CenterTextField();
-        bar = new TopPanel(instructions, data, centerField);
+        bar = new TopPanel(instructions, data, register, centerField);
         
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Processor.BACKGROUND_COLOR);
@@ -42,11 +42,11 @@ class TopPanel extends JPanel implements ActionListener
     private JButton run;
     private Perform perform;
 
-    public TopPanel(InstructionMemory instructions, DataMemory data, CenterTextField field)
+    public TopPanel(InstructionMemory instructions, DataMemory data, Register register, CenterTextField field)
     {
         setBackground(Color.BLUE);
 
-        perform = new Perform(instructions, data, field);
+        perform = new Perform(instructions, data, register, field);
 
         ImageIcon icon = Processor.resizeImage("Run.png", 70, 70);
         run = new JButton(icon);

@@ -25,14 +25,19 @@ public class Register extends TableWorks
             "$gp",
             "$sp",
             "$fp",
-            "$ra"
+            "$ra",
+            "hi",
+            "lo"
         };
 
-        REGISTER_NUMBERS = new Integer[32];
+        REGISTER_NUMBERS = new Integer[34];
 
-        for(int i = 0; i < 32; i++)
+        for(int i = 0; i < REGISTER_NUMBERS.length; i++)
         {
-            REGISTER_NUMBERS[i] = i;
+            if(i != 32 && i != 33)
+                REGISTER_NUMBERS[i] = i;
+            else
+                REGISTER_NUMBERS[i] = null;
         }
 
         COLUMNS = new String []
@@ -47,14 +52,21 @@ public class Register extends TableWorks
     {
         GridBagConstraints gbc = setLayout();
 
-        registers = new Integer[32];
+        registers = new Integer[34];
         
-        for(int i = 0; i < 32; i++)
-            registers[i] = 0;
+        for(int i = 0; i < 34; i++)
+        {
+            if(i != 28 && i != 29)
+                registers[i] = 0;
+            else if(i == 29)
+                registers[i] = 268_468_224;
+            else
+                registers[i] = 2_147_479_548;
+        }
 
-        Object [][] data = new Object[32][1];
+        Object [][] data = new Object[34][1];
 
-        for(int i = 0; i < 32; i++)
+        for(int i = 0; i < 34; i++)
         {
             Object[] obj = {REGISTER_NAMES[i], REGISTER_NUMBERS[i], registers[i]};
 
@@ -72,14 +84,21 @@ public class Register extends TableWorks
 
     public void updateRegister(int regPosition, int regValue)
     {
-        if(regPosition < 0 || regPosition > 31)
+        if(regPosition < 0 || regPosition >= 34)
         {
-            throw new IndexOutOfBoundsException(regPosition + " out of bounds for array of length 32.");
+            throw new IndexOutOfBoundsException(regPosition + " out of bounds for array of length 34.");
         }
 
         registers[regPosition] = regValue;
 
         table.setValueAt(registers[regPosition], regPosition, 2, FIRST, SECOND, Color.ORANGE);
+    }
+
+    public int getValue(int regPosition)
+    {
+        updateRegister(regPosition, registers[regPosition]);
+
+        return registers[regPosition];
     }
 
     public void reset()

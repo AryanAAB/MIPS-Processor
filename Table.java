@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -11,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
 public class Table extends JTable
 {
     private JScrollPane scrollPane;
+
+    private Set<Integer> set;
 
     public Table(Object [][] data, Object[] columns)
     {
@@ -24,7 +28,9 @@ public class Table extends JTable
                 }
             }
         );
-
+        
+        set = new TreeSet<>();
+        
         setAlternateColor(Color.WHITE, Color.WHITE);
         
         scrollPane = new JScrollPane(this);
@@ -100,6 +106,8 @@ public class Table extends JTable
 
     public void reset(Color first, Color second)
     {
+        set = new TreeSet<>();
+
         setAlternateColor(first, second);
     }
 
@@ -110,6 +118,8 @@ public class Table extends JTable
 
         public SetAlternateRenderer(Color color1, Color color2, Color color3, int row)
         {
+            set.add(row);
+
             this.color1 = color1;
             this.color2 = color2;
             this.color3 = color3;
@@ -123,7 +133,7 @@ public class Table extends JTable
             
             if(!isSelected)
             {
-                if(color3 != null && this.row == row)
+                if(color3 != null && set.contains(row))
                 {
                     cell.setBackground(color3);
                 }

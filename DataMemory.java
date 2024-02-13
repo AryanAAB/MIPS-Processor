@@ -58,7 +58,7 @@ public class DataMemory extends TableWorks
         return mem;
     }
 
-    public void updateData(long address)
+    public DataAddress getData(long address)
     {
         int row = (int)(address - DataAddress.START);
 
@@ -66,6 +66,8 @@ public class DataMemory extends TableWorks
             throw new IndexOutOfBoundsException("Index of out bounds for length " + memData.size() + ". Given : " + row + ".");
         
         table.highlight(FIRST, SECOND, Color.ORANGE, row);
+
+        return memData.get(row);
     }
 
     public void reset()

@@ -46,7 +46,8 @@ public enum Opcodes
 
         for(Opcodes v : Opcodes.values())
         {
-            funcMap.put(v.FUNCTION, v);
+            if(v.FUNCTION != null)
+                funcMap.put(v.FUNCTION, v);
         }
     }
     
@@ -79,5 +80,43 @@ public enum Opcodes
     public static Opcodes getByFunction(String function)
     {
         return funcMap.get(function);
+    }
+
+    public boolean isRFormat()
+    {
+        return (this == RFORMAT || this.getFunction() != null) && (this != SYSCALL);
+    }
+
+    public Formats [] getReadRegister1()
+    {
+        if(this == RFORMAT)
+        {
+            throw new UnsupportedOperationException("Cannot get Register Read 1 for " + this + ".");
+        }
+
+        Formats [] format = new Formats[2];
+        format[0] = Formats.RS_START;
+        format[1] = Formats.RS_END;
+
+        return format;
+    }
+
+    public Formats [] getReadRegister2()
+    {
+        if(this == RFORMAT)
+        {
+            throw new UnsupportedOperationException("Cannot get Register Read 1 for " + this + ".");
+        }
+
+        Formats [] format = new Formats[2];
+        format[0] = Formats.RT_START;
+        format[1] = Formats.RT_END;
+
+        return format;
+    }
+
+    public Formats [] getWriteRegister3()
+    {
+        return null;
     }
 }
