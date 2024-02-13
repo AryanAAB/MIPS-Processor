@@ -7,7 +7,6 @@ result: .asciiz "F(%d) is %d\n"
 .text
 .globl main
 
-# Function to multiply two matrices
 multiply:
     # $a0: matrix a
     # $a1: matrix b
@@ -36,8 +35,8 @@ multiply:
     mul $t7, $t1, $t4
     mul $t8, $t2, $t5
     add $t9, $t6, $t7
-    add $t10, $t9, $t8
-    sw $t10, 0($a2)
+    add $t9, $t9, $t8
+    sw $t9, 0($a2)
 
     # Row 2
     lw $t0, 0($a0)
@@ -50,8 +49,8 @@ multiply:
     mul $t7, $t1, $t4
     mul $t8, $t2, $t5
     add $t9, $t6, $t7
-    add $t10, $t9, $t8
-    sw $t10, 4($a2)
+    add $t9, $t9, $t8
+    sw $t9, 4($a2)
 
     # Row 3
     lw $t0, 0($a0)
@@ -64,10 +63,11 @@ multiply:
     mul $t7, $t1, $t4
     mul $t8, $t2, $t5
     add $t9, $t6, $t7
-    add $t11, $t9, $t8
-    sw $t11, 8($a2)
+    add $t9, $t9, $t8
+    sw $t9, 8($a2)
 
     jr $ra
+
 
 # Function to raise matrix F to the power of n
 power:
