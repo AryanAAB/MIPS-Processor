@@ -1,7 +1,13 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -14,7 +20,7 @@ public class Processor extends JFrame
     private Manager manage;
     public static final int HEIGHT = 600, WIDTH = 800;
     public static final Color BACKGROUND_COLOR = Color.ORANGE;
-    
+
     public Processor()
     {
         super("MIPS Processor");
@@ -27,6 +33,22 @@ public class Processor extends JFrame
 
         pack();
         setLocationRelativeTo(null);
+    }
+
+    public static ImageIcon resizeImage(String imageName, int width, int height)
+    {
+        try
+        {
+            BufferedImage original = ImageIO.read(new File(imageName));
+            Image scaledImage = original.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaledImage);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static void main(String [] args)
