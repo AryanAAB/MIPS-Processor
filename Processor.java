@@ -12,12 +12,14 @@ import javax.swing.event.ChangeListener;
 public class Processor extends JFrame
 {
     private Manager manage;
-
+    public static final int HEIGHT = 600, WIDTH = 800;
+    public static final Color BACKGROUND_COLOR = Color.ORANGE;
+    
     public Processor()
     {
         super("MIPS Processor");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setResizable(false);
 
         manage = new Manager();
