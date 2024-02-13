@@ -1,5 +1,9 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Opcodes 
 {
+    RFORMAT ("000000"), 
     ADD     ("000000", "100000"),
     ADDI    ("001000"),
     ADDIU   ("001001"),
@@ -16,12 +20,36 @@ public enum Opcodes
     BEQ     ("000100"),
     J       ("000010"),
     JAL     ("000011"),
-    JR      ("000000", "001000")
+    JR      ("000000", "001000"),
+    SYSCALL ("000000", "001100")
     ;
 
     private final String OPCODE;
     private final String FUNCTION;
+    
+    private static final Map<String, Opcodes> opcodeMap;
+    private static final Map<String, Opcodes> funcMap;
 
+    static 
+    {
+        opcodeMap = new HashMap<>();
+
+        for (Opcodes v : Opcodes.values()) 
+        {
+            opcodeMap.put(v.OPCODE, v);
+        }
+    }
+
+    static
+    {
+        funcMap = new HashMap<>();
+
+        for(Opcodes v : Opcodes.values())
+        {
+            funcMap.put(v.FUNCTION, v);
+        }
+    }
+    
     private Opcodes(String opcode, String function)
     {
         OPCODE = opcode;
@@ -41,5 +69,15 @@ public enum Opcodes
     public String getFunction()
     {
         return FUNCTION;
+    }
+
+    public static Opcodes getByOpcode(String opcode)
+    {
+        return opcodeMap.get(opcode);
+    }
+
+    public static Opcodes getByFunction(String function)
+    {
+        return funcMap.get(function);
     }
 }

@@ -58,7 +58,7 @@ public class InstructionMemory extends TableWorks
         return mem;
     }
 
-    public void updateInstruction(long address)
+    public MemAddress updateInstruction(long address)
     {
         int row = (int)(address - MemAddress.START);
 
@@ -66,6 +66,8 @@ public class InstructionMemory extends TableWorks
             throw new IndexOutOfBoundsException("Index of out bounds for length " + instructions.size() + ". Given : " + row + ".");
         
         table.highlight(FIRST, SECOND, Color.ORANGE, row);
+
+        return instructions.get(row);
     }
 
     public void reset()
@@ -98,5 +100,18 @@ class MemAddress extends Memory
     public String getAddress()
     {
         return "0x" + Long.toHexString(address).toUpperCase();
+    }
+
+    public String getBinValue()
+    {
+        String hex = super.getValue().toUpperCase();
+
+        long value = Long.parseLong(hex, 16);
+        String binString = Long.toBinaryString(value);
+
+        while(binString.length() < 32)
+            binString = "0" + binString;
+        
+        return binString;
     }
 }

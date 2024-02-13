@@ -1,55 +1,65 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.LineBorder;
 
 public class DrawingBoard extends JPanel
 {
     private InputOutputFields fields;
     private TopPanel bar;
-    public DrawingBoard()
+    private CenterTextField centerField;
+
+    public DrawingBoard(InstructionMemory instructions, DataMemory data)
     {
         super(new BorderLayout());
 
         setBackground(Processor.BACKGROUND_COLOR);
 
         fields = new InputOutputFields();
-        bar = new TopPanel();
+        centerField = new CenterTextField();
+        bar = new TopPanel(instructions, data, centerField);
         
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Processor.BACKGROUND_COLOR);
         panel.add(bar, BorderLayout.NORTH);
-        
+        panel.add(centerField, BorderLayout.CENTER);
+
         add(fields, BorderLayout.SOUTH);
         add(panel, BorderLayout.CENTER);
     }
 }
 
-class TopPanel extends JPanel
+class TopPanel extends JPanel implements ActionListener
 {
     private JButton run;
+    private Perform perform;
 
-    public TopPanel()
+    public TopPanel(InstructionMemory instructions, DataMemory data, CenterTextField field)
     {
         setBackground(Color.BLUE);
 
-        ImageIcon icon = Processor.resizeImage("Run.png", 50, 50);
+        perform = new Perform(instructions, data, field);
+
+        ImageIcon icon = Processor.resizeImage("Run.png", 70, 70);
         run = new JButton(icon);
 
-        run.setPreferredSize(new Dimension(50, 50));
+        run.setPreferredSize(new Dimension(70, 70));
+        run.addActionListener(this);
         add(run);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) 
+    {
+        perform.perform();
     }
 }
 

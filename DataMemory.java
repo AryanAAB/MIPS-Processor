@@ -58,7 +58,7 @@ public class DataMemory extends TableWorks
         return mem;
     }
 
-    public void updateInstruction(long address)
+    public void updateData(long address)
     {
         int row = (int)(address - DataAddress.START);
 

@@ -75,11 +75,11 @@ class Manager extends JPanel
     {
         super(new GridLayout(1, 1));
 
-        draw = new DrawingBoard();
         register = new Register();
         instructions = new InstructionMemory();
         data = new DataMemory();
-
+        draw = new DrawingBoard(instructions, data);
+        
         ReadFile.closeTerminal();
 
         tabs = new JTabbedPane();
