@@ -25,7 +25,7 @@ public class Perform extends JPanel
         field.appendPlain("\n");
 
         Opcodes opcode = decode(address);
-        regRead(address, opcode);
+        int [] registers = regRead(address, opcode);
     }
 
     private void reset()
@@ -68,7 +68,7 @@ public class Perform extends JPanel
         return ans;
     }
 
-    private void regRead(MemAddress address, Opcodes opcode)
+    private int [] regRead(MemAddress address, Opcodes opcode)
     {
         Formats [] format = opcode.getReadRegister1();
 
@@ -85,5 +85,7 @@ public class Perform extends JPanel
         int reg2 = registers.getValue(Integer.parseInt(binString, 2));
 
         field.appendPlain("Register Read 2 at $" + Long.parseLong(binString, 2) + " is " + reg2 + ".");
+
+        return new int [] {reg1, reg2};
     }
 }
