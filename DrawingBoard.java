@@ -71,8 +71,7 @@ class TopPanel extends JPanel implements ActionListener
 class InputOutputFields extends JPanel
 {
     private JTextArea input, output;
-    private JButton button;
-
+    
     public static final int HEIGHT = 200;
     public static final int WIDTH = Processor.WIDTH - 40;
 
@@ -82,7 +81,7 @@ class InputOutputFields extends JPanel
 
         input = new JTextArea();
         input.setLineWrap(true);
-        input.setEditable(false);
+        input.setEditable(true);
         input.setEnabled(true);
         input.setPreferredSize(new Dimension(WIDTH/2, HEIGHT));
 
@@ -98,11 +97,7 @@ class InputOutputFields extends JPanel
         JScrollPane outputScroll = new JScrollPane(output);
         outputScroll.setBorder(BorderFactory.createTitledBorder("Output"));
 
-        button = new JButton("Enter");
-        button.setEnabled(false);
-        
         JPanel leftPanel = new JPanel(new BorderLayout());
-        leftPanel.add(button, BorderLayout.SOUTH);
         leftPanel.add(inputScroll, BorderLayout.CENTER);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -115,5 +110,10 @@ class InputOutputFields extends JPanel
     public void writeData(String str)
     {
         output.append(str);
+    }
+
+    public int getData()
+    {
+        return Integer.parseInt(input.getText());
     }
 }

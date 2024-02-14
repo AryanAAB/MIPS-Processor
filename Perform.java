@@ -140,7 +140,7 @@ public class Perform extends JPanel
     {
         field.appendBold("EXECUTE STAGE");
 
-        int executeValue = -1;
+        int executeValue = -1, readValue = -1;
         int hi = -1, lo = -1;
 
         switch(opcode)
@@ -216,9 +216,10 @@ public class Perform extends JPanel
                         DataAddress temp = data.getData(address);
                         char character = (char)(temp.getByte(pos));
 
-                        str += character;
-                        if(character == '\n')
+                        if(character == 0)
                             break;
+
+                        str += character;
                         pos++;
                     }
 
@@ -234,6 +235,11 @@ public class Perform extends JPanel
                     field.appendBold("\nPROGRAM TERMINATED");
                     io.writeData("--program is finished running--\n");
                     return null;
+                }
+                else if(this.registers.getValue(2) == 5)
+                {
+                    readValue = io.getData();
+                    field.appendPlain("Read Value : " + readValue);
                 }
 
                 break;
@@ -259,7 +265,7 @@ public class Perform extends JPanel
                 break;
         }
 
-        return new int [] {executeValue, hi, lo};
+        return new int [] {executeValue, hi, lo, readValue};
     }
 
     private int memAccess(Opcodes opcode, int [] registers, int [] values)
@@ -339,6 +345,13 @@ public class Perform extends JPanel
                 registers.updateRegister(32, executeValues[1]);
                 break;
             
+            case SYSCALL:
+                if(this.registers.getValue(2) == 5)
+                {
+                    field.appendPlain("Writing to register at position 2 with value " + executeValues[3] + ".");
+                    registers.updateRegister(2, executeValues[3]);
+                    break;
+                }
             default:
                 field.appendPlain("Nothing is happening in write back stage.");
                 break;
