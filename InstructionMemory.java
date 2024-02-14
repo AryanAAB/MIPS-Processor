@@ -60,7 +60,7 @@ public class InstructionMemory extends TableWorks
 
     public MemAddress updateInstruction(long address)
     {
-        int row = (int)(address - MemAddress.START);
+        int row = (int)(address - MemAddress.START) / 4;
 
         if(row < 0 || row >= instructions.size())
             throw new IndexOutOfBoundsException("Index of out bounds for length " + instructions.size() + ". Given : " + row + ".");

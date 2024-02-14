@@ -25,7 +25,7 @@ public class DrawingBoard extends JPanel
 
         fields = new InputOutputFields();
         centerField = new CenterTextField();
-        bar = new TopPanel(instructions, data, register, centerField);
+        bar = new TopPanel(instructions, data, register, centerField, fields);
         
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Processor.BACKGROUND_COLOR);
@@ -42,11 +42,11 @@ class TopPanel extends JPanel implements ActionListener
     private JButton run;
     private Perform perform;
 
-    public TopPanel(InstructionMemory instructions, DataMemory data, Register register, CenterTextField field)
+    public TopPanel(InstructionMemory instructions, DataMemory data, Register register, CenterTextField field, InputOutputFields io)
     {
         setBackground(Color.BLUE);
 
-        perform = new Perform(instructions, data, register, field);
+        perform = new Perform(instructions, data, register, field, io, this);
 
         ImageIcon icon = Processor.resizeImage("Run.png", 70, 70);
         run = new JButton(icon);
@@ -60,6 +60,11 @@ class TopPanel extends JPanel implements ActionListener
     public void actionPerformed(ActionEvent e) 
     {
         perform.perform();
+    }
+
+    public void stop()
+    {
+        run.setEnabled(false);
     }
 }
 
@@ -77,7 +82,8 @@ class InputOutputFields extends JPanel
 
         input = new JTextArea();
         input.setLineWrap(true);
-        input.setEnabled(false);
+        input.setEditable(false);
+        input.setEnabled(true);
         input.setPreferredSize(new Dimension(WIDTH/2, HEIGHT));
 
         JScrollPane inputScroll = new JScrollPane(input);
@@ -86,7 +92,7 @@ class InputOutputFields extends JPanel
         output = new JTextArea();
         output.setEditable(false);
         output.setLineWrap(true);
-        output.setEnabled(false);
+        output.setEnabled(true);
         output.setPreferredSize(new Dimension(WIDTH/2, HEIGHT));
 
         JScrollPane outputScroll = new JScrollPane(output);
@@ -104,5 +110,10 @@ class InputOutputFields extends JPanel
         mainPanel.add(outputScroll, BorderLayout.CENTER);
 
         add(mainPanel);
-    }   
+    }
+    
+    public void writeData(String str)
+    {
+        output.append(str);
+    }
 }

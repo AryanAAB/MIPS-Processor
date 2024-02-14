@@ -62,7 +62,7 @@ public class Table extends JTable
 
     public void setAlternateColor(Color first, Color second)
     {
-        SetAlternateRenderer alternate = new SetAlternateRenderer(first, second, null, 0);
+        SetAlternateRenderer alternate = new SetAlternateRenderer(first, second, null, -1);
         
         for(int i = 0; i < getColumnCount(); i++)
         {
@@ -114,8 +114,7 @@ public class Table extends JTable
     private class SetAlternateRenderer extends DefaultTableCellRenderer 
     {
         private Color color1, color2, color3;
-        private int row;
-
+        
         public SetAlternateRenderer(Color color1, Color color2, Color color3, int row)
         {
             set.add(row);
@@ -123,7 +122,6 @@ public class Table extends JTable
             this.color1 = color1;
             this.color2 = color2;
             this.color3 = color3;
-            this.row = row;
         }
 
         @Override

@@ -60,7 +60,7 @@ public class DataMemory extends TableWorks
 
     public DataAddress getData(long address)
     {
-        int row = (int)(address - DataAddress.START);
+        int row = (int)(address - DataAddress.START) / 4;
 
         if(row < 0 || row >= memData.size())
             throw new IndexOutOfBoundsException("Index of out bounds for length " + memData.size() + ". Given : " + row + ".");
@@ -68,6 +68,17 @@ public class DataMemory extends TableWorks
         table.highlight(FIRST, SECOND, Color.ORANGE, row);
 
         return memData.get(row);
+    }
+
+    public void writeData(int pos, int dataValue)
+    {
+        int row = (int)(pos - DataAddress.START) / 4;
+        if(row < 0 || row >= memData.size())
+            throw new IndexOutOfBoundsException("Index of out bounds for length " + memData.size() + ". Given : " + row + ".");
+
+        memData.get(row).writeData(dataValue);
+
+        table.setValueAt(dataValue, row, 1, FIRST, SECOND, Color.ORANGE);
     }
 
     public void reset()
@@ -107,5 +118,22 @@ class DataAddress
     public String getValue()
     {
         return "0x" + value.toUpperCase();
+    }
+
+    public int getByte(int pos)
+    {
+        if(pos < 0 || pos > 4)
+            throw new IndexOutOfBoundsException(pos + " is out of bounds for length 4.");
+        
+        return bytes[pos];
+    }
+
+    public void writeData(int data)
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            bytes[i] = data & (11111111);
+            data >>= 8;
+        }
     }
 }
