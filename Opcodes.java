@@ -14,6 +14,8 @@ public enum Opcodes
     ORI     ("001101"),
     SUB     ("000000", "100010"),
     MUL     ("011100"),
+    SLT     ("000000", "101010"),
+    SLL     ("000000", "000000"),
     BNE     ("000101"),
     DIV     ("000000", "011010"),
     MFLO    ("000000", "010010"),
@@ -159,6 +161,20 @@ public enum Opcodes
         Formats [] format = new Formats[2];
         format[0] = Formats.J_START;
         format[1] = Formats.J_END;
+
+        return format;
+    }
+
+    public Formats [] getShiftFormats()
+    {
+        if(this == RFORMAT)
+        {
+            throw new UnsupportedOperationException("Cannot get Register Read 1 for " + this + ".");
+        }
+
+        Formats [] format = new Formats[2];
+        format[0] = Formats.SHAMT_START;
+        format[1] = Formats.SHAMT_END;
 
         return format;
     }

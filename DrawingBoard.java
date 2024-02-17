@@ -1,3 +1,13 @@
+/**
+ * This file is used for creating the main Processor page in the GUI.
+ * It takes care of the top panel (containing the button), the input output
+ * fields, and centeral text field.
+ * 
+ * @author Aryan, Pratham, Arnav
+ * @version 1.0
+ * @since 15/02/2024
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,6 +27,11 @@ public class DrawingBoard extends JPanel
     private TopPanel bar;
     private CenterTextField centerField;
 
+    /**
+     * @param instructions : The instruction memory object
+     * @param data : The data memory object
+     * @param register : The register objecct
+     */
     public DrawingBoard(InstructionMemory instructions, DataMemory data, Register register)
     {
         super(new BorderLayout());
@@ -39,9 +54,16 @@ public class DrawingBoard extends JPanel
 
 class TopPanel extends JPanel implements ActionListener
 {
-    private JButton run;
+    private JButton run, fastRun;
     private Perform perform;
 
+    /**
+     * @param instructions : The instruction memory object
+     * @param data : The data object
+     * @param register : The register object
+     * @param field : The centeral field object
+     * @param io : The input output object
+     */
     public TopPanel(InstructionMemory instructions, DataMemory data, Register register, CenterTextField field, InputOutputFields io)
     {
         setBackground(Color.BLUE);
@@ -50,28 +72,57 @@ class TopPanel extends JPanel implements ActionListener
 
         ImageIcon icon = Processor.resizeImage("Run.png", 70, 70);
         run = new JButton(icon);
-
         run.setPreferredSize(new Dimension(70, 70));
         run.addActionListener(this);
+
+        icon = Processor.resizeImage("Complete.png", 70, 70);
+        fastRun = new JButton(icon);
+        fastRun.setPreferredSize(new Dimension(70, 70));
+        fastRun.addActionListener(new FastRun());
+        
         add(run);
+        add(fastRun);
     }
 
-    @Override
+    /**
+     * When the button is clicked, the operations are performed.
+     * @param e : The ActionEvent that occured.
+     * @Override
+     */
     public void actionPerformed(ActionEvent e) 
     {
         perform.perform();
     }
 
+    /**
+     * When the entire process is finished, the button is stopped from being clicked.
+     */
     public void stop()
     {
         run.setEnabled(false);
+        fastRun.setEnabled(false);
+    }
+
+    private class FastRun implements ActionListener
+    {
+        /**
+         * When the button is clicked, the operations are performed until the program terminates.
+         * @param e : The ActionEvent that occured.
+         * @Override
+         */
+        public void actionPerformed(ActionEvent e) 
+        {
+            while(run.isEnabled())
+                perform.perform();
+        }
     }
 }
 
 class InputOutputFields extends JPanel
 {
     private JTextArea input, output;
-    
+    private int pos = 0;
+
     public static final int HEIGHT = 200;
     public static final int WIDTH = Processor.WIDTH - 40;
 
@@ -107,13 +158,20 @@ class InputOutputFields extends JPanel
         add(mainPanel);
     }
     
+    /**
+     * Writes the data to the output file.
+     * @param str : The string to be written.
+     */
     public void writeData(String str)
     {
         output.append(str);
     }
 
+    /**
+     * @return the input data
+     */
     public int getData()
     {
-        return Integer.parseInt(input.getText());
+        return Integer.parseInt(input.getText().split("\n")[pos++]);
     }
 }

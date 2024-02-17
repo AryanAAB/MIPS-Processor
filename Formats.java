@@ -1,3 +1,7 @@
+/**
+ * This file stores the formats, i.e., the different positions where
+ * the 
+ */
 public enum Formats 
 {
     OPCODE_START   (0,  31),

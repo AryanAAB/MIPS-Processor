@@ -51,6 +51,22 @@ public class Processor extends JFrame
         return null;
     }
 
+    public static int getIntFromBinary(String binary)
+    {
+        long l = Long.parseLong(binary, 2);
+        int i = (int) l;
+
+        return i;
+    }
+
+    public static int getIntFromHex(String hex)
+    {
+        long l = Long.parseLong(hex, 16);
+        int i = (int) l;
+
+        return i;
+    }
+
     public static void main(String [] args)
     {
         SwingUtilities.invokeLater(() -> 

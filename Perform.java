@@ -99,41 +99,46 @@ public class Perform extends JPanel
     {
         Formats [] format = opcode.getReadRegister1();
         String binString = address.getBinValue().substring(format[0].get(), format[1].get());
-        int reg1 = registers.getValue(Integer.parseInt(binString, 2));
-        int reg1Pos = Integer.parseInt(binString, 2);
+        int reg1 = registers.getValue(Processor.getIntFromBinary(binString));
+        int reg1Pos = Processor.getIntFromBinary(binString);
         field.appendPlain("Register Read 1 at $" + Long.parseLong(binString, 2) + " is " + reg1 + ".");
 
         format = opcode.getReadRegister2();
         binString = address.getBinValue().substring(format[0].get(), format[1].get());
-        int reg2 = registers.getValue(Integer.parseInt(binString, 2));
-        int reg2Pos = Integer.parseInt(binString, 2);
+        int reg2 = registers.getValue(Processor.getIntFromBinary(binString));
+        int reg2Pos = Processor.getIntFromBinary(binString);
         field.appendPlain("Register Read 2 at $" + Long.parseLong(binString, 2) + " is " + reg2 + ".");
         
         format = opcode.getWriteRegister3();
         binString = address.getBinValue().substring(format[0].get(), format[1].get());
-        int reg3Pos = Integer.parseInt(binString, 2);
+        int reg3Pos = Processor.getIntFromBinary(binString);
         field.appendPlain("Register Write 3 at $" + Long.parseLong(binString, 2) + " or $" + reg2Pos + ".");
 
         format = opcode.getSignedExetension();
         binString = address.getBinValue().substring(format[0].get(), format[1].get());
-        int before = Integer.parseInt(binString, 2);
+        int before = Processor.getIntFromBinary(binString);
 
         while(binString.length() < 32)
         {
             binString = binString.charAt(0) + binString;
         }
 
-        int after = Integer.parseInt(binString, 2);
+        int after = Processor.getIntFromBinary(binString);
         field.appendPlain("Unsigned Extended Value " + before + ".");
         field.appendPlain("Signed Extended Value " + after + ".");
 
         format = opcode.getJumpFormats();
         binString = address.getBinValue().substring(format[0].get(), format[1].get());
         binString = binString + "00";
+        int jumpValue = Processor.getIntFromBinary(binString);
+        field.appendPlain("Jump Extension " + jumpValue + ".");
 
-        field.appendPlain("Jump Extension " + Integer.parseInt(binString, 2) + ".");
+        format = opcode.getShiftFormats();
+        binString = address.getBinValue().substring(format[0].get(), format[1].get());
+        int shiftAmt = Processor.getIntFromBinary(binString);
+        field.appendPlain("Shift Amount : " + shiftAmt + ".");
 
-        return new int [] {reg1, reg2, before, after, Integer.parseInt(binString, 2), reg1Pos, reg2Pos, reg3Pos};
+        return new int [] {reg1, reg2, before, after, jumpValue, reg1Pos, reg2Pos, reg3Pos, shiftAmt};
     }
 
     private int [] execute(Opcodes opcode, int [] registers)
@@ -158,7 +163,7 @@ public class Perform extends JPanel
                 field.appendPlain("Adding registers A1 and A2. The resultant is " + executeValue + ".");
                 break;
             case ADDIU:
-                executeValue = registers[0] + registers[2];
+                executeValue = registers[0] + registers[3];
                 field.appendPlain("Adding A1 register with unsigned immediate field. The resultant is " + executeValue + ".");
                 break;
             case AND:
@@ -184,6 +189,14 @@ public class Perform extends JPanel
                 executeValue = lo;
                 
                 field.appendPlain("Multiplying registers A1 and A2. The resultant is " + executeValue + ".");
+                break;
+            case SLT:
+                executeValue = registers[0] < registers[1] ? 1 : 0;
+                field.appendPlain("Comparing registers A1 and A2 (A1 < A2). The resultant is " + executeValue + ".");
+                break;
+            case SLL:
+                executeValue = registers[1] << registers[8];
+                field.appendPlain("Shifting register A1 to the right by " + registers[8] + ". The resultant is " + executeValue + ".");
                 break;
             case BNE:
                 executeValue = (registers[0] == registers[1]) ? 0 : 1;
@@ -304,6 +317,8 @@ public class Perform extends JPanel
             case AND:
             case ADDU:
             case ADD:
+            case SLT:
+            case SLL:
                 field.appendPlain("Writing to register at position " + registerPositions[7] + " with value " + executeValues[0] + ".");
                 registers.updateRegister(registerPositions[7], executeValues[0]);
                 break;
