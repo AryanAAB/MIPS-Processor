@@ -194,6 +194,10 @@ public class Perform extends JPanel
                 executeValue = registers[0] < registers[1] ? 1 : 0;
                 field.appendPlain("Comparing registers A1 and A2 (A1 < A2). The resultant is " + executeValue + ".");
                 break;
+            case SLTI:
+                executeValue = registers[0] < registers[3] ? 1 : 0;
+                field.appendPlain("Comparing registers A1 with immediate value " + registers[3] + ". The resultant is " + executeValue + ".");
+                break;
             case SLL:
                 executeValue = registers[1] << registers[8];
                 field.appendPlain("Shifting register A1 to the right by " + registers[8] + ". The resultant is " + executeValue + ".");
@@ -335,6 +339,7 @@ public class Perform extends JPanel
                 break;
             
             case LUI:
+            case SLTI:
             case ORI:
             case ADDI:
             case ADDIU:

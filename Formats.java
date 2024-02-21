@@ -1,6 +1,6 @@
 /**
- * This file stores the formats, i.e., the different positions where
- * the 
+ * This file stores the formats, i.e., the different positions of
+ * the R, I, and J formats. 
  */
 public enum Formats 
 {
@@ -28,17 +28,28 @@ public enum Formats
     private final int inString;
     private final int actual;
 
+    /**
+     * Private constructor only for this enum.
+     * @param inString : The position where it starts in the binary string in our case.
+     * @param actual : The position where it starts in the binary string in the actual format.
+     */
     private Formats(int inString, int actual)
     {
         this.inString = inString;
         this.actual = actual;
     }
 
+    /**
+     * @return the starting/ending position of the format
+     */
     public int get()
     {
         return inString;
     }
 
+    /**
+     * @return the starting/ending position in the actual format
+     */
     public int getActual()
     {
         return actual;
