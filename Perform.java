@@ -1,3 +1,11 @@
+/**
+ * This class Performs all the instructions.
+ * 
+ * @author Aryan, Pratham, Arnav
+ * @version 1.0
+ * @since 15/02/24
+ */
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -11,6 +19,14 @@ public class Perform extends JPanel
     private InputOutputFields io;
     private TopPanel panel;
 
+    /**
+     * @param instructions : The InstructionMemory object
+     * @param data : The DataMemory object
+     * @param registers : The Register object
+     * @param field : The CenterTextField object
+     * @param io : The input/output object
+     * @param panel : The TopPanel Object
+     */
     public Perform(InstructionMemory instructions, DataMemory data, Register registers, CenterTextField field, InputOutputFields io, TopPanel panel)
     {
         this.instructions = instructions;
@@ -23,6 +39,9 @@ public class Perform extends JPanel
         PC = MemAddress.START;
     }
 
+    /**
+     * Performs the instructions.
+     */
     public void perform()
     {
         reset();
@@ -54,6 +73,9 @@ public class Perform extends JPanel
         }
     }
 
+    /**
+     * Resets all the tables to normal colors.
+     */
     private void reset()
     {
         registers.reset();
@@ -61,6 +83,9 @@ public class Perform extends JPanel
         data.reset();
     }
 
+    /**
+     * @return MemAddress : The Memory Address object representing the current instruction.
+     */
     private MemAddress fetch()
     {
         field.appendBold("FETCH STAGE");
@@ -73,6 +98,11 @@ public class Perform extends JPanel
         return instruct;
     }
 
+    /**
+     * 
+     * @param mem : The Memory Address Object
+     * @return Opcodes : The decoded opcode
+     */
     private Opcodes decode(MemAddress mem)
     {
         field.appendBold("DECODE STAGE/REGISTER ACCESS STAGE");
@@ -95,25 +125,36 @@ public class Perform extends JPanel
         return ans;
     }
 
+    /**
+     * @param address : The Memory Address
+     * @param opcode : The decoded opcode
+     * @return int [] : The array containing {register 1 value, register 2 value, unsigned extended value,
+     *      signed extended value, jump value, position of register 1, position of register 2, position 
+     *      of register 3, the shift amount}
+     */
     private int [] regRead(MemAddress address, Opcodes opcode)
     {
+        //Gets value of register 1
         Formats [] format = opcode.getReadRegister1();
         String binString = address.getBinValue().substring(format[0].get(), format[1].get());
         int reg1 = registers.getValue(Processor.getIntFromBinary(binString));
         int reg1Pos = Processor.getIntFromBinary(binString);
         field.appendPlain("Register Read 1 at $" + Long.parseLong(binString, 2) + " is " + reg1 + ".");
 
+        //Gets value of register 2
         format = opcode.getReadRegister2();
         binString = address.getBinValue().substring(format[0].get(), format[1].get());
         int reg2 = registers.getValue(Processor.getIntFromBinary(binString));
         int reg2Pos = Processor.getIntFromBinary(binString);
         field.appendPlain("Register Read 2 at $" + Long.parseLong(binString, 2) + " is " + reg2 + ".");
         
+        //Gets position of register 3
         format = opcode.getWriteRegister3();
         binString = address.getBinValue().substring(format[0].get(), format[1].get());
         int reg3Pos = Processor.getIntFromBinary(binString);
         field.appendPlain("Register Write 3 at $" + Long.parseLong(binString, 2) + " or $" + reg2Pos + ".");
 
+        //Unsigned extension
         format = opcode.getSignedExetension();
         binString = address.getBinValue().substring(format[0].get(), format[1].get());
         int before = Processor.getIntFromBinary(binString);
@@ -123,16 +164,19 @@ public class Perform extends JPanel
             binString = binString.charAt(0) + binString;
         }
 
+        //Signed extension
         int after = Processor.getIntFromBinary(binString);
         field.appendPlain("Unsigned Extended Value " + before + ".");
         field.appendPlain("Signed Extended Value " + after + ".");
 
+        //Jump instruction
         format = opcode.getJumpFormats();
         binString = address.getBinValue().substring(format[0].get(), format[1].get());
         binString = binString + "00";
         int jumpValue = Processor.getIntFromBinary(binString);
         field.appendPlain("Jump Extension " + jumpValue + ".");
 
+        //Shift amount
         format = opcode.getShiftFormats();
         binString = address.getBinValue().substring(format[0].get(), format[1].get());
         int shiftAmt = Processor.getIntFromBinary(binString);
@@ -140,7 +184,12 @@ public class Perform extends JPanel
 
         return new int [] {reg1, reg2, before, after, jumpValue, reg1Pos, reg2Pos, reg3Pos, shiftAmt};
     }
-
+    
+    /**
+     * @param opcode : The decoded opcode
+     * @param registers : The values from register read phase
+     * @return int [] : The executed value, high, low, read value
+     */
     private int [] execute(Opcodes opcode, int [] registers)
     {
         field.appendBold("EXECUTE STAGE");
@@ -285,6 +334,12 @@ public class Perform extends JPanel
         return new int [] {executeValue, hi, lo, readValue};
     }
 
+    /**
+     * @param opcode : The Decoded opcode
+     * @param registers : The values from register read phase
+     * @param values : The values from execute phase
+     * @return int : the value read/written from this phase or -1 otherwise
+     */
     private int memAccess(Opcodes opcode, int [] registers, int [] values)
     {
         field.appendBold("MEMORY ACCESS STAGE");
@@ -311,6 +366,12 @@ public class Perform extends JPanel
         return value;
     }
 
+    /**
+     * @param opcode : The Decoded opcode
+     * @param registerPositions : The values from register read phase
+     * @param executeValues : The values from execute phase
+     * @param memValue : The memory read/write value
+     */
     private void wb(Opcodes opcode, int [] registerPositions, int [] executeValues, int memValue)
     {
         field.appendBold("WRITEBACK STAGE");
@@ -378,6 +439,11 @@ public class Perform extends JPanel
         }
     }
 
+    /**
+     * @param opcode : The decoded opcode
+     * @param executeValues : The values from execute phase
+     * @param registerValues : The values from register read phase
+     */
     private void incrementPC(Opcodes opcode, int [] executeValues, int [] registerValues)
     {
         field.appendBold("CHANGING PC");
@@ -426,6 +492,11 @@ public class Perform extends JPanel
         }
     }
 
+    /**
+     * Gets byte addressable data memory.
+     * @param temp : The DataAddress
+     * @return int : The actual data
+     */
     private int getValue(DataAddress temp)
     {
         int ans = temp.getByte(3);

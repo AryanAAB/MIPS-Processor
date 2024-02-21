@@ -1,3 +1,11 @@
+/**
+ * This enum stores a list of opcodes as well as the function codes (for R Format instructions)
+ * for the different instructions used in the program.
+ * 
+ * @author Aryan, Pratham, Arnav
+ * @version 1.0
+ * @since 15/02/24
+ */
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,42 +68,71 @@ public enum Opcodes
         }
     }
     
+    /**
+     * Creates an opcode based on the opcode and the function field.
+     * @param opcode : The opcode of the enum
+     * @param function : The function field of the enum (for R format instructions)
+     */ 
     private Opcodes(String opcode, String function)
     {
         OPCODE = opcode;
         FUNCTION = function;
     }
 
+    /**
+     * Creates an opcode based on only the opcode.
+     * @param opcode : The opcode of the enum
+     */
     private Opcodes(String opcode)
     {
         this(opcode, null);
     }
 
+    /**
+     * @return String : A String representation of the opcode
+     */
     public String getOpcode()
     {
         return OPCODE;
     }
 
+    /**
+     * @return String : A String representation of the function field
+     */
     public String getFunction()
     {
         return FUNCTION;
     }
 
+    /**
+     * @param opcode : Returns the Opcode based on the String representation of the opcode
+     * @return Opcodes : The Enum opcode
+     */
     public static Opcodes getByOpcode(String opcode)
     {
         return opcodeMap.get(opcode);
     }
 
+    /**
+     * @param function : Returns the Opcode based on the String representation of the function
+     * @return Opcodes : The Enum opcode
+     */
     public static Opcodes getByFunction(String function)
     {
         return funcMap.get(function);
     }
 
+    /**
+     * @return boolean : If this instruction is of type RFormat
+     */
     public boolean isRFormat()
     {
         return (this == RFORMAT || this.getFunction() != null) && (this != SYSCALL);
     }
 
+    /**
+     * @return Formats : The format of the first register A1
+     */
     public Formats [] getReadRegister1()
     {
         if(this == RFORMAT)
@@ -110,6 +147,9 @@ public enum Opcodes
         return format;
     }
 
+    /**
+     * @return Formats : The format of the second register A2
+     */
     public Formats [] getReadRegister2()
     {
         if(this == RFORMAT)
@@ -124,6 +164,9 @@ public enum Opcodes
         return format;
     }
 
+    /**
+     * @return Formats : The format of the third register A3
+     */
     public Formats [] getWriteRegister3()
     {
         if(this == RFORMAT)
@@ -138,6 +181,9 @@ public enum Opcodes
         return format;
     }
 
+    /**
+     * @return Formats : The format of the signed extended value
+     */
     public Formats [] getSignedExetension()
     {
         if(this == RFORMAT)
@@ -152,6 +198,9 @@ public enum Opcodes
         return format;
     }
 
+    /**
+     * @return Formats : The format of the jump format
+     */
     public Formats [] getJumpFormats()
     {
         if(this == RFORMAT)
@@ -166,6 +215,9 @@ public enum Opcodes
         return format;
     }
 
+    /**
+     * @return Formats : The format of the shift format
+     */
     public Formats [] getShiftFormats()
     {
         if(this == RFORMAT)

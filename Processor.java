@@ -1,3 +1,8 @@
+/**
+ * This is the Processor file which manages the GUI and when
+ * to execute different instructions.
+ */
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -35,6 +40,13 @@ public class Processor extends JFrame
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Resizes the image given
+     * @param imageName : The String represnetation of the image
+     * @param width : The new width of the image
+     * @param height : The new height of the image
+     * @return ImageIcon : The resized Image
+     */
     public static ImageIcon resizeImage(String imageName, int width, int height)
     {
         try
@@ -51,6 +63,10 @@ public class Processor extends JFrame
         return null;
     }
 
+    /**
+     * @param binary : The binary representation
+     * @return int : The integer value
+     */
     public static int getIntFromBinary(String binary)
     {
         long l = Long.parseLong(binary, 2);
@@ -59,6 +75,10 @@ public class Processor extends JFrame
         return i;
     }
 
+    /**
+     * @param hex : The hex representation
+     * @return int : The integer value
+     */
     public static int getIntFromHex(String hex)
     {
         long l = Long.parseLong(hex, 16);
@@ -77,6 +97,9 @@ public class Processor extends JFrame
     }
 }
 
+/**
+ * This class creates the entire layout for the GUI
+ */
 class Manager extends JPanel
 {
     private JTabbedPane tabs;

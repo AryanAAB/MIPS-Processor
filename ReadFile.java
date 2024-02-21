@@ -1,3 +1,11 @@
+/**
+ * Reads the file from the user.
+ * 
+ * @author Aryan, Pratham, Arnav
+ * @version 1.0
+ * @since 15/02/24
+ */
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,6 +23,9 @@ public class ReadFile
         sc = new BufferedReader(new InputStreamReader(System.in));
     }
 
+    /**
+     * @param message : message for user
+     */
     public ReadFile(String message)
     {
         while(true)
@@ -31,6 +42,10 @@ public class ReadFile
         }
     }
 
+    /**
+     * @param message : message for user
+     * @return String : The name of file
+     */
     private String getFileName(String message)
     {
         String fileName = "";
@@ -50,6 +65,9 @@ public class ReadFile
         return fileName;
     }
     
+    /**
+     * @return boolean : if reader is not empty
+     */
     public boolean ready()
     {
         try
@@ -66,6 +84,9 @@ public class ReadFile
         return false;
     }
 
+    /**
+     * @return String : the next line
+     */
     public String readLine()
     {
         try
@@ -82,6 +103,9 @@ public class ReadFile
         return null;
     }
 
+    /**
+     * Closes the reader.
+     */
     public void close()
     {
         try
@@ -96,6 +120,9 @@ public class ReadFile
         }
     }
 
+    /**
+     * Closes the terminal object.
+     */
     public static void closeTerminal()
     {
         try
