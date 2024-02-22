@@ -268,7 +268,7 @@ public class Perform extends JPanel
                 if(this.registers.getValue(2) == 4)
                 {
                     int address = this.registers.getValue(4);
-                    int pos = 0;
+                    int pos = (int)(address - DataAddress.START) % 4;
 
                     String str = "";
                     while(true)
@@ -282,7 +282,7 @@ public class Perform extends JPanel
                         DataAddress temp = data.getData(address);
                         char character = (char)(temp.getByte(pos));
 
-                        if(character == 0)
+                        if(character == '\0')
                             break;
 
                         str += character;
