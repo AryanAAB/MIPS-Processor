@@ -90,6 +90,11 @@ public class Register extends TableWorks
         add(table.getScrollPane(), gbc);
     }
 
+    /**
+     * Updates the register at regPosition with regValue.
+     * @param regPosition : The position of the register
+     * @param regValue : The new value of the register
+     */
     public void updateRegister(int regPosition, int regValue)
     {
         if(regPosition < 0 || regPosition >= 34)
@@ -102,6 +107,10 @@ public class Register extends TableWorks
         table.setValueAt(toHex(registers[regPosition]), regPosition, 2, FIRST, SECOND, Color.ORANGE);
     }
 
+    /**
+     * @param regPosition : The position of the register
+     * @return int : The value of the register at regPosition
+     */
     public int getValue(int regPosition)
     {
         updateRegister(regPosition, registers[regPosition]);
@@ -109,11 +118,19 @@ public class Register extends TableWorks
         return registers[regPosition];
     }
 
+    /**
+     * Resets the table to its original color.
+     */
     public void reset()
     {
         table.reset(FIRST, SECOND);
     }
 
+    /**
+     * Converts an integer to a hex String.
+     * @param num : The integer value
+     * @return String : The hex String
+     */
     private String toHex(int num)
     {
         String str = Integer.toHexString(num).toUpperCase();

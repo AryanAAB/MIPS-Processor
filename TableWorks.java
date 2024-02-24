@@ -1,3 +1,6 @@
+/**
+ * Creates a table framework for the registers, data, and instructions.
+ */
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -8,6 +11,10 @@ public abstract class TableWorks extends JPanel
 {
     public static final Color FIRST = Color.WHITE, SECOND = Color.LIGHT_GRAY;
 
+    /**
+     * Sets the layout of the table
+     * @return GridBagConstraints : The layout of the table
+     */
     protected GridBagConstraints setLayout()
     {
         setLayout(new GridBagLayout());
@@ -22,5 +29,8 @@ public abstract class TableWorks extends JPanel
         return gbc;
     }
 
+    /**
+     * Resets the table.
+     */
     protected abstract void reset();
 }
