@@ -16,6 +16,11 @@ main:
     syscall
     move $s0 , $v0
 
+    # printing new line
+    li $v0 , 4
+    la $a0 , New_Line
+    syscall    
+
     li $s1 , 0      #counter
     li $s2 , 1      #x_coordinate
     li $s3 , 0      #y_coordinate

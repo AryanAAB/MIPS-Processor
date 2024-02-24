@@ -1,3 +1,11 @@
+/**
+ * Maintains a list of 32 registers representing the registers in MIPS.
+ * 
+ * @author Aryan, Pratham, Arnav
+ * @version 1.0
+ * @since 15/02/24
+ */
+
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 
@@ -68,7 +76,7 @@ public class Register extends TableWorks
 
         for(int i = 0; i < 34; i++)
         {
-            Object[] obj = {REGISTER_NAMES[i], REGISTER_NUMBERS[i], registers[i]};
+            Object[] obj = {REGISTER_NAMES[i], REGISTER_NUMBERS[i], toHex(registers[i])};
 
             data[i] = obj;
         }
@@ -91,7 +99,7 @@ public class Register extends TableWorks
 
         registers[regPosition] = regValue;
 
-        table.setValueAt(registers[regPosition], regPosition, 2, FIRST, SECOND, Color.ORANGE);
+        table.setValueAt(toHex(registers[regPosition]), regPosition, 2, FIRST, SECOND, Color.ORANGE);
     }
 
     public int getValue(int regPosition)
@@ -104,5 +112,17 @@ public class Register extends TableWorks
     public void reset()
     {
         table.reset(FIRST, SECOND);
+    }
+
+    private String toHex(int num)
+    {
+        String str = Integer.toHexString(num).toUpperCase();
+
+        for(int i = str.length(); i < 8; i++)
+        {
+            str = "0" + str;
+        }
+
+        return "0x" + str;
     }
 }
