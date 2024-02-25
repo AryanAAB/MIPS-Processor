@@ -1,75 +1,98 @@
-    .data
-numbers: .word -10 , -7 , 0 , 4 , 16
-length:  .word 5
-output_prompt: .asciiz "The sorted array is: "
-New_Line: .asciiz "\n"
-space_str: .asciiz " "
+.data
+	numbers: .word -10, 50, 74, 32, 51, 4 , 0 , -7 , -10 , 16
+	length:  .word 10
+	output_prompt: .asciiz "The sorted array is: "
+	New_Line: .asciiz "\n"
+	space_str: .asciiz " "
 
-    .text
-    .globl main
+.text
+.globl main
 
 main:
-    la $s0 , numbers        # $s0 = array of numbers
-    lw $s1 , length         # $s1 = length of the array (n)
-    li $s2 , 0              # $s2 = i and initialized to 0
-    li $s3 , 1              # $s3 = j and initialized to 1
-    subi $s4 , $s2 , 1      # $s4 = (n-1)
-    li $s7 , 0              # $s7 = k and initialized to 0 for printing the array
-
-    loop_i:
-        bge $s2 , $s1 , print_array
-        li $s5 , 0          # $s5 = index of max element and it is initialized to 0
-        li $s3 , 1
-
-        loop_j:
-            bge $s3 , $s4 , increment_i
-	        lw $t0 , numbers($s3)
-	        lw $t1 , numbers($s5)
-            bgt $t0 , $t1 , set_max
-
-            increment_j:
-                addi $s3 , $s3 , 1
-                j loop_j
-        
-        swap_elements:
-            sub $s6 , $s4 , $s2
-            lw $t0 , numbers($s6)
-            lw $t1 , numbers($s5)
-
-            move $t2 , $t0
-            move $t0 , $t1
-            move $t1 , $t2
-
-        increment_i:
-                addi $s2 , $s2 , 1
-                j loop_i
+    la $s0, numbers        # $s0 = array of numbers
+    lw $s1, length         # $s1 = length of the array (n)
+    li $s2, 0              # $s2 = i and initialized to 0
     
-    set_max:
-        move $s5 , $s3
-        j increment_j
-    
-    li $v0 , 4
-    la $a0 , output_prompt
-    syscall
-
-    print_array:
-        bge $s7 , $s1 , end_program
-        li $v0 , 1
-        lw $a0 , 0($s0)
-        syscall
-
-        li $v0 , 4
-        la $a0 , space_str
-        syscall
-
-        addi $s0, $s0, 4
-        addi $s7, $s7, 1
-        j print_array
-
-    end_program:
-        li $v0 , 4
-        la $a0 , New_Line
-        syscall
-
-        li $v0 , 10
-        syscall
+    outer:
+    bge $s2, $s1, print_array #if (i >= length) then branch to print_array
+	    
+	    add $t1, $s2, $0  #pos = i + 0
+	    addi $s3, $s2, 1  #j = i + 1
+	    
+	    inner:
+	    bge $s3, $s1, increment_outer #if (j >= length) then branch to increment outer
+	    
+	    	mul $t2, $s3, 4 #j * 4
+	    	mul $t3, $t1, 4 #pos * 4
+	    	add $t2, $t2, $s0 #j * 4 + base
+	    	add $t3, $t3, $s0 #pos * 4 + base
+	    	lw  $t2, 0($t2) #M[j * 4 + base]
+	    	lw  $t3, 0($t3) #M[pos * 4 + base]
+	    
+	    	bge $t2, $t3, not_less #if (t2 < t3 then update pos to j)
+	    		addi $t1, $s3, 0  #pos = j
+	    	
+	    	not_less:	#increment j by 1
+	    	addi $s3, $s3, 1
+	    	j inner
+	    
+	    increment_outer:
+	    mul $t2, $s2, 4
+	    add $t2, $t2, $s0 #load address of M[i] into $t2
+	    mul $t3, $t1, 4
+	    add $t3, $t3, $s0 #load address of M[pos] into $t3
+	    
+	    #swapping M[i] and M[pos]
+	    lw $t4, 0($t2)
+	    lw $t5, 0($t3)
+	    sw $t5, 0($t2)
+	    sw $t4, 0($t3)
+	    
+	    #incrementing i by 1
+	    addi $s2, $s2, 1
+	    j outer
+	
+     print_array:
+     
+     #printing prompt
+     la $t0, output_prompt
+     li $v0, 4
+     add $a0, $t0, $0
+     syscall
+     
+     #i = 0
+     li $t0, 0
+     
+     print:
+     bge $t0, $s1, exit
+     
+     	#Getting value of i'th element
+        mul $t3, $t0, 4
+     	add $t1, $t3, $s0
+     	lw $t1, 0($t1)
+     	
+     	#Printing i'th element
+     	li $v0, 1
+     	add $a0, $t1, $0
+     	syscall
+     	
+     	#Printing a space
+     	la $t4, space_str
+     	li $v0, 4
+     	add $a0, $t4, $0
+     	syscall
+     	
+     	#Incrementing i by 1
+     	addi $t0, $t0, 1
+     	j print
+     
+     #Printing a new line
+     exit:
+     la $t0, New_Line
+     li $v0, 4
+     add $a0, $t0, $0
+     syscall
+     
+     #Exiting the program
+     li $v0, 10
+     syscall
