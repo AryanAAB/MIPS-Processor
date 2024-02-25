@@ -294,7 +294,7 @@ public class Perform extends JPanel
                 else if(this.registers.getValue(2) == 1)
                 {
                     int ans = this.registers.getValue(4);
-                    io.writeData(ans + "\n");
+                    io.writeData(ans + "");
                 }
                 else if(this.registers.getValue(2) == 10)
                 {
@@ -499,13 +499,11 @@ public class Perform extends JPanel
      */
     private int getValue(DataAddress temp)
     {
-        int ans = temp.getByte(3);
-        ans <<= 8;
-        ans += temp.getByte(2);
-        ans <<= 8;
-        ans += temp.getByte(1);
-        ans <<= 8;
-        ans += temp.getByte(0);
+        int ans = 0x00000000;
+        ans = temp.getByte(3) << 24;
+        ans = ans | temp.getByte(2) << 16;
+        ans = ans | temp.getByte(1) << 8;
+        ans = ans | temp.getByte(0);
 
         return ans;
     }

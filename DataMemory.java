@@ -109,7 +109,7 @@ public class DataMemory extends TableWorks
 
         memData.get(row).writeData(dataValue);
 
-        table.setValueAt(dataValue, row, 1, FIRST, SECOND, Color.ORANGE);
+        table.setValueAt(memData.get(row).getValue(), row, 1, FIRST, SECOND, Color.ORANGE);
     }
 
     /**
@@ -128,8 +128,7 @@ class DataAddress
 
     private long address;
     private String value;
-    private int [] bytes;
-
+    
     /**
      * Creates a DataAddress object from the hex string that is given.
      * The address of the data starts from START and goes up by 4 every time.
@@ -141,13 +140,7 @@ class DataAddress
     {
         address = count;
         value = hex;
-        bytes = new int[4];
-
-        for(int i = hex.length() - 1, j = 0; i >= 1; i -= 2, j++)
-        {
-            bytes[j] = Processor.getIntFromHex(hex.substring(i - 1, i + 1));
-        }
-
+        
         count += 4;
     }
 
@@ -174,10 +167,11 @@ class DataAddress
      */
     public int getByte(int pos)
     {
-        if(pos < 0 || pos > 4)
+        if(pos < 0 || pos >= 4)
             throw new IndexOutOfBoundsException(pos + " is out of bounds for length 4.");
         
-        return bytes[pos];
+        pos = 3 - pos;
+        return Integer.parseInt(value.substring(pos * 2, pos * 2 + 2), 16);
     }
 
     /**
@@ -188,10 +182,7 @@ class DataAddress
     {
         value = Integer.toHexString(data);
 
-        for(int i = 0; i < 4; i++)
-        {
-            bytes[i] = data & (0xFFFFFFFF);
-            data >>= 8;
-        }
+        while(value.length() != 8)
+            value = "0" + value;
     }
 }
